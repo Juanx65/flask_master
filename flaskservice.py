@@ -1,8 +1,7 @@
 from flask import Flask, request, render_template
 app = Flask(__name__)
 
-from commons import get_tensor
-
+from commons import get_detection
 @app.route('/', methods=['GET','POST'])
 def predict():
 	if request.method=='GET':
