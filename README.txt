@@ -28,3 +28,6 @@ obs: si no ecuentra torch==1.5.0 en los requirements.txt, intente con la siguien
 
 	pip install torch===1.5.0 torchvision===0.6.0 -f https://download.pytorch.org/whl/torch_stable.html
 
+obs: si eres cpu only usar linea siguiente en vez de la anterior:
+
+	pip install torch==1.5.0+cpu torchvision==0.6.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
