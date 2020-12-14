@@ -38,22 +38,30 @@ def Convertir_BGR(img):
     img[:, :, 2] = r
     return img
 
-def get_detection(img):
+def get_detection(img,div_in,out):
+
+    #div_in = "CLP"
+
 
     dinero = list()
 
     dicc_clases = {"1kbill" : 1000, "2kbill": 2000, "5kbill": 5000, "10kbill": 10000, "20kbill": 20000}
 
+    dicc_divisas = {"CLP":{"USD": 0.0014, "EUR": 0.0011},
+                    "USD": { "CLP":735.20 , "EUR": 0.82 },
+                    "EUR":{ "CLP": 893.51, "USD": 1.22}
+                    }
+
 
     model_def="config/yolov3-custom.cfg"
     class_path="data/custom/classes.names"
-    weights_path="checkpoints/yolov3_ckpt_5.pth"
+    weights_path="checkpoints/yolov3_ckpt_6.pth"
     conf_thres=0.8
     nms_thres=0.4
     batch_size=1
     n_cpu=0
     img_size=416
-    checkpoint_model="checkpoints/yolov3_ckpt_5.pth"
+    checkpoint_model="checkpoints/yolov3_ckpt_6.pth"
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("cuda" if torch.cuda.is_available() else "cpu")
@@ -103,6 +111,7 @@ def get_detection(img):
     for billete in dinero:
         cant_total += dicc_clases[billete]
 
+    cant_out = round(cant_total*dicc_divisas[div_in][out],4)
 
 
     frame = Convertir_BGR(frame)
@@ -110,4 +119,4 @@ def get_detection(img):
     name = "static/"+image_name
     cv2.imwrite(name,frame)
 
-    return image_name,cant_total
+    return image_name,cant_total,cant_out
