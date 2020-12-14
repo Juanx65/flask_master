@@ -57,4 +57,4 @@ Esto nos dará el enlace al servidor que nos ayudará a ejecutar la detección d
 
 # __Disfrutar de la pobre detecciond de billetes__
 
-![Captura de el servidor web](/images_readme/flaskServiceresult.png)
+![Captura de el servidor web](/images_readme/flaskServiceResult.png)
