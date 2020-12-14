@@ -18,8 +18,8 @@ def predict():
 			return
 		file = request.files['file']
 		image = file.read()
-		result = get_detection(img=image)
-		return render_template('result.html',result = result)
+		result,cant_total = get_detection(img=image)
+		return render_template('result.html',result = result,cant_total = cant_total)
 
 if __name__ == '__main__':
 	app.run(debug=True)

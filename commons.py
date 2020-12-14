@@ -40,15 +40,20 @@ def Convertir_BGR(img):
 
 def get_detection(img):
 
+    dinero = list()
+
+    dicc_clases = {"1kbill" : 1000, "2kbill": 2000, "5kbill": 5000, "10kbill": 10000, "20kbill": 20000}
+
+
     model_def="config/yolov3-custom.cfg"
     class_path="data/custom/classes.names"
-    weights_path="checkpoints/yolov3_ckpt_97.pth"
+    weights_path="checkpoints/yolov3_ckpt_5.pth"
     conf_thres=0.8
     nms_thres=0.4
     batch_size=1
     n_cpu=0
     img_size=416
-    checkpoint_model="checkpoints/yolov3_ckpt_97.pth"
+    checkpoint_model="checkpoints/yolov3_ckpt_5.pth"
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("cuda" if torch.cuda.is_available() else "cpu")
@@ -85,7 +90,7 @@ def get_detection(img):
             for x1, y1, x2, y2, conf, cls_conf, cls_pred in detection:
                 box_w = x2 - x1
                 box_h = y2 - y1
-                #print(cls_pred)
+                dinero.append(classes[int(cls_pred)])
                 color = [int(c) for c in colors[int(cls_pred)]]
                 print("Se detectó {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2, y2))
                 frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 5)
@@ -93,13 +98,16 @@ def get_detection(img):
                 cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,color, 5) # Certeza de prediccion de la clase
     #
     #Convertimos de vuelta a BGR para que cv2 pueda desplegarlo en los colores correctos
+
+    cant_total = 0
+    for billete in dinero:
+        cant_total += dicc_clases[billete]
+
+
+
     frame = Convertir_BGR(frame)
     image_name = "result_{}.jpg".format(uuid.uuid1())
     name = "static/"+image_name
     cv2.imwrite(name,frame)
-    """
-    cv2.imshow('frame', frame)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    """
-    return image_name
+
+    return image_name,cant_total
