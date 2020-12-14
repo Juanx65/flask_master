@@ -8,6 +8,8 @@ import sys
 import argparse
 import io
 
+import uuid
+
 import torchvision.transforms as transforms
 import numpy as np
 
@@ -47,7 +49,7 @@ def get_detection(img):
     n_cpu=0
     img_size=416
     checkpoint_model="checkpoints/yolov3_ckpt_97.pth"
-    
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("cuda" if torch.cuda.is_available() else "cpu")
     model = Darknet(model_def, img_size=img_size).to(device)
@@ -91,8 +93,13 @@ def get_detection(img):
                 cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,color, 5) # Certeza de prediccion de la clase
     #
     #Convertimos de vuelta a BGR para que cv2 pueda desplegarlo en los colores correctos
+    frame = Convertir_BGR(frame)
+    image_name = "result_{}.jpg".format(uuid.uuid1())
+    name = "static/"+image_name
+    cv2.imwrite(name,frame)
+    """
     cv2.imshow('frame', frame)
     cv2.waitKey(0)
-    out.release()
     cv2.destroyAllWindows()
-    return frame
+    """
+    return image_name
