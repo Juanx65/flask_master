@@ -8,12 +8,12 @@ def predict():
 		return render_template('index.html', value="!!!!!")
 	if request.method=='POST':
 		predict_bill = "1kbill"
-		if 'file' not in request.file:
+		if 'file' not in request.files:
 			print('file not uploaded')
 			return
-		file = request.file['file']
+		file = request.files['file']
 		image = file.read()
-		print(get_detection(image=image))
+		get_detection(img=image)
 		return render_template('result.html', billtype=predict_bill)
 
 if __name__ == '__main__':

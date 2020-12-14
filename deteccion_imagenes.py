@@ -1,4 +1,4 @@
-#modificado 3/12/2020 richi
+#modificado 13/12/2020 juan ( para transoformar en funci'on)
 from __future__ import division
 from models import *
 from utils.utils import *

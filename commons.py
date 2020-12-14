@@ -1,12 +1,15 @@
-#alguna wea
-
+#alguna wea 13/12/20
 from __future__ import division
-from bills.models import *
-from bills.utils.utils import *
-from bills.utils.datasets import *
+from models import *
+from utils.utils import *
+from utils.datasets import *
 import os
 import sys
 import argparse
+import io
+
+import torchvision.transforms as transforms
+import numpy as np
 
 import cv2
 from PIL import Image
@@ -23,7 +26,6 @@ def Convertir_RGB(img):
     img[:, :, 2] = b
     return img
 
-
 def Convertir_BGR(img):
     # Convertir red, blue, green a Blue, green, red
     r = img[:, :, 0].copy()
@@ -35,5 +37,62 @@ def Convertir_BGR(img):
     return img
 
 def get_detection(img):
-	image_folder = "data/samples"
-	model_def = "config/yolov3.cfg"
+
+    model_def="config/yolov3-custom.cfg"
+    class_path="data/custom/classes.names"
+    weights_path="checkpoints/yolov3_ckpt_97.pth"
+    conf_thres=0.8
+    nms_thres=0.4
+    batch_size=1
+    n_cpu=0
+    img_size=416
+    checkpoint_model="checkpoints/yolov3_ckpt_97.pth"
+    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("cuda" if torch.cuda.is_available() else "cpu")
+    model = Darknet(model_def, img_size=img_size).to(device)
+    model.load_state_dict(torch.load(weights_path))
+
+    model.eval()
+    classes = load_classes(class_path)
+    classes.append('5kbill')
+    #print(classes)
+    Tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
+
+    frame = cv2.imdecode(np.fromstring(img, np.uint8), cv2.IMREAD_UNCHANGED)
+
+    colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
+    #frame = cv2.resize(frame, (1280, 960), interpolation=cv2.INTER_CUBIC)
+    #LA imagen viene en Blue, Green, Red y la convertimos a RGB que es la entrada que requiere el modelo
+    RGBimg=Convertir_RGB(frame)
+    imgTensor = transforms.ToTensor()(frame)
+    imgTensor, _ = pad_to_square(imgTensor, 0)
+    imgTensor = resize(imgTensor, 416)
+    imgTensor = imgTensor.unsqueeze(0)
+    imgTensor = Variable(imgTensor.type(Tensor))
+
+
+    with torch.no_grad():
+        detections = model(imgTensor)
+        detections = non_max_suppression(detections, conf_thres, nms_thres)
+
+
+    for detection in detections:
+        if detection is not None:
+            detection = rescale_boxes(detection, img_size, RGBimg.shape[:2])
+            for x1, y1, x2, y2, conf, cls_conf, cls_pred in detection:
+                box_w = x2 - x1
+                box_h = y2 - y1
+                #print(cls_pred)
+                color = [int(c) for c in colors[int(cls_pred)]]
+                print("Se detectó {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2, y2))
+                frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 5)
+                cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 5)# Nombre de la clase detectada
+                cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,color, 5) # Certeza de prediccion de la clase
+    #
+    #Convertimos de vuelta a BGR para que cv2 pueda desplegarlo en los colores correctos
+    cv2.imshow('frame', frame)
+    cv2.waitKey(0)
+    out.release()
+    cv2.destroyAllWindows()
+    return frame
