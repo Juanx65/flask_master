@@ -37,22 +37,22 @@ def Convertir_BGR(img):
     img[:, :, 1] = g
     img[:, :, 2] = r
     return img
-
-def get_detection(img,div_in,out):
-
-    #div_in = "CLP"
-
-
-    dinero = list()
-
-    dicc_clases = {"1kbill" : 1000, "2kbill": 2000, "5kbill": 5000, "10kbill": 10000, "20kbill": 20000}
-
+def convertir_divisas(cant_total,div_in,div_out):
     dicc_divisas = {"CLP":{"USD": 0.0014, "EUR": 0.0011, "CNY": 0.0089},
                     "USD": { "CLP":735.20 , "EUR": 0.82, "CNY": 6.55 },
                     "EUR":{ "CLP": 893.51, "USD": 1.22, "CNY": 7.96},
                     "CNY":{"CLP": 112.26 , "USD":0.15 ,"EUR": 0.13}
                     }
+    if div_in != div_out:
+        cant_out = round(cant_total*dicc_divisas[div_in][div_out],4)
+    else:
+        cant_out = cant_total
+    return cant_out
 
+def get_detection(img):
+
+    dinero = list()
+    dicc_clases = {"1kbill" : 1000, "2kbill": 2000, "5kbill": 5000, "10kbill": 10000, "20kbill": 20000}
 
     model_def="config/yolov3-custom.cfg"
     class_path="data/custom/classes.names"
@@ -112,12 +112,9 @@ def get_detection(img,div_in,out):
     for billete in dinero:
         cant_total += dicc_clases[billete]
 
-    cant_out = round(cant_total*dicc_divisas[div_in][out],4)
-
-
     frame = Convertir_BGR(frame)
     image_name = "result_{}.jpg".format(uuid.uuid1())
     name = "static/"+image_name
     cv2.imwrite(name,frame)
 
-    return image_name,cant_total,cant_out
+    return image_name,cant_total

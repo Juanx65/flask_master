@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 
-from commons import get_detection
+from commons import get_detection, convertir_divisas
 
 @app.route('/', methods=['GET','POST'])
 def predict():
@@ -17,11 +17,15 @@ def predict():
 			return
 		file = request.files['file']
 		div_in = request.form['div_in']
-		out = request.form['out']
+		div_out = request.form['out']
 		image = file.read()
-		result,cant_total,cant_out = get_detection(image,div_in,out)
+		try:
+			result, cant_total = get_detection(image)
+		except:
+			return render_template('handler.html',error = "can't upload image" )
 
-		return render_template('result.html',result = result,cant_total = cant_total,div_out = out, cant_out = cant_out )
+		cant_out = convertir_divisas(cant_total,div_in,div_out)
+		return render_template('result.html',result = result,cant_total = cant_total,div_out = div_out, cant_out = cant_out )
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0')#host='0.0.0.0'
+	app.run(debug=True)#host='0.0.0.0'
