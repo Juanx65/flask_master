@@ -47,21 +47,22 @@ def get_detection(img,div_in,out):
 
     dicc_clases = {"1kbill" : 1000, "2kbill": 2000, "5kbill": 5000, "10kbill": 10000, "20kbill": 20000}
 
-    dicc_divisas = {"CLP":{"USD": 0.0014, "EUR": 0.0011},
-                    "USD": { "CLP":735.20 , "EUR": 0.82 },
-                    "EUR":{ "CLP": 893.51, "USD": 1.22}
+    dicc_divisas = {"CLP":{"USD": 0.0014, "EUR": 0.0011, "CNY": 0.0089},
+                    "USD": { "CLP":735.20 , "EUR": 0.82, "CNY": 6.55 },
+                    "EUR":{ "CLP": 893.51, "USD": 1.22, "CNY": 7.96},
+                    "CNY":{"CLP": 112.26 , "USD":0.15 ,"EUR": 0.13}
                     }
 
 
     model_def="config/yolov3-custom.cfg"
     class_path="data/custom/classes.names"
-    weights_path="checkpoints/yolov3_ckpt_6.pth"
+    weights_path="checkpoints/yolov3_ckpt_97.pth"
     conf_thres=0.8
     nms_thres=0.4
     batch_size=1
     n_cpu=0
     img_size=416
-    checkpoint_model="checkpoints/yolov3_ckpt_6.pth"
+    checkpoint_model="checkpoints/yolov3_ckpt_97.pth"
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("cuda" if torch.cuda.is_available() else "cpu")
