@@ -35,12 +35,26 @@ pip install torch==1.5.0+cpu torchvision==0.6.0+cpu -f https://download.pytorch.
 
 ###### Instalar los requerimientos para el entorno virtual.
 
-
-
 ```
 pip install -r requirements.txt
 ```
-###### Ejecutar la siguiente linea de codigo para
+###### Descargar los pesos necesarios para la deteccion en el siguiente link
+```
+https://drive.google.com/drive/folders/1WUfFYVQJHfnu9zykEf5jZiSoq6v-qNqy?usp=sharing
+```
+Donde:
+
+Peso funcional cpu: yolov3_ckpt_97.pth
+
+Peso funcional solo gpu: yolov3_ckpt_6.pth
+
+Agregamos este archivo a la carpeta checkpoints
+
+Notamos que es necesario cambiar este valor en commons.py en las lineas 59 y 65 dependiendo de el peso escogido de la siguente forma:
+
+![Captura de el servidor web](/images_readme/pesos.png)
+
+###### Ejecutar la siguiente linea de codigo para iniciar el webservice
 
 ```
 python flaskservice.py
@@ -51,10 +65,10 @@ Esto nos dará el enlace al servidor que nos ayudará a ejecutar la detección d
 
 ![Captura de el servidor web](/images_readme/flaskservice.png)
 
-##### Seleccionar un archivo desde el computador (por el momento) y hacer click en upload para cargarlo al servidor.
+##### Nos conectamos desde el navegador webpreferido, ya sea en un computador o dispositivo movil y seleccionar un archivo deseado, luego hacemos click en upload para cargarlo al servidor.
 
 
 
-# __Disfrutar de la pobre detecciond de billetes__
+# __Disfrutar de una lamentable deteccion de billetes__
 
 ![Captura de el servidor web](/images_readme/flaskServiceResult.png)
