@@ -72,3 +72,20 @@ Esto nos dará el enlace al servidor que nos ayudará a ejecutar la detección d
 # __Disfrutar de una lamentable deteccion de billetes__
 
 ![Captura de el servidor web](/images_readme/flaskServiceResult.png)
+
+###### App movil con reconocimiento de billetes!
+
+Finalmente para implementar este webservice en una aplicación movil capaz de reconocimiento de billetes chilenos, clonamos el siguiente repositorio
+
+```
+https://github.com/mgks/Android-SmartWebView
+```
+Abrimos el proyecto en Android Studio y cambiamos en java/MainActivity la linea 128 por lo siguiente
+```
+private static String ASWV_URL          = "http://192.168.0.5:5000/";
+```
+Donde la direccion http://192.168.0.5:5000/ corresponde a la direccion del webservice creado anteriormente.
+
+Como se ve a continuacion
+
+![Captura de el servidor web](/images_readme/AppMovil.png)
