@@ -1,1 +1,3 @@
 checkpoints/*.pth
+checkpoints_xd/**
+static/*.jpg
