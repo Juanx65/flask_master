@@ -1,4 +1,4 @@
-## Deteccion de billetes
+## Detección de billetes
 14/12/2020
 
 
@@ -10,8 +10,12 @@ Por :   Juan Aguilera ,
 
 
 ### Instrucciones:
+Si no tiene conda, recomendamos descargar miniconda3 y añadirlo a su path, sino usar Anaconda Prompt para navegar en los ambientes virtuales.
 
-
+link de descarga:
+```
+https://docs.conda.io/en/latest/miniconda.html
+```
 
 ###### Crear un ambiente virtual con conda y activarlo
 
@@ -59,8 +63,15 @@ Notamos que es necesario cambiar este valor en commons.py en las lineas 59 y 65 
 ```
 python flaskservice.py
 ```
+Todo listo para acceder a su webservice de manera local!
 
-Esto nos dará el enlace al servidor que nos ayudará a ejecutar la detección de billetes.
+si necesita saber su direccion ip, en la cmd de windows digite
+
+```
+ipconfig
+```
+
+Esto nos dará la dirección (IPv4) al servidor que nos ayudará a ejecutar la detección de billetes.
 
 
 ![Captura de el servidor web](/images_readme/flaskservice.png)
@@ -69,13 +80,13 @@ Esto nos dará el enlace al servidor que nos ayudará a ejecutar la detección d
 
 
 
-# __Disfrutar de una lamentable deteccion de billetes__
+# __Disfrutar de una (aun mejorable) detección de billetes__
 
 ![Captura de el servidor web](/images_readme/flaskServiceResult.png)
 
-###### App movil con reconocimiento de billetes!
+# __App movil con reconocimiento de billetes!__
 
-Finalmente para implementar este webservice en una aplicación movil capaz de reconocimiento de billetes chilenos, clonamos el siguiente repositorio
+Adicionalmente para implementar este webservice en una aplicación movil capaz de reconocimiento de billetes chilenos, clonamos el siguiente repositorio
 
 ```
 https://github.com/mgks/Android-SmartWebView
@@ -89,3 +100,5 @@ Donde la direccion http://192.168.0.5:5000/ corresponde a la direccion del webse
 Como se ve a continuacion
 
 ![Captura de el servidor web](/images_readme/AppMovil.png)
+
+Queda por implementar en esta aplicación el uso de la cámara.
